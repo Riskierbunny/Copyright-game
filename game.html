@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Copyright Challenge - Game</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            text-align: center;
+            margin: 0;
+            padding: 0;
+        }
+
+        header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 20px 0;
+        }
+
+        header h1 {
+            margin: 0;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 40px auto;
+            padding: 20px;
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .question {
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+        }
+
+        button {
+            background-color: #3498db;
+            color: white;
+            padding: 10px 20px;
+            font-size: 1rem;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 10px;
+        }
+
+        button:hover {
+            background-color: #2980b9;
+        }
+
+        footer {
+            background-color: #2c3e50;
+            color: white;
+            text-align: center;
+            padding: 20px 0;
+            margin-top: 40px;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>Copyright Challenge</h1>
+    </header>
+
+    <div class="container">
+        <div id="questionContainer">
+            <p class="question" id="questionText">Loading question...</p>
+            <button onclick="answerQuestion(true)">True</button>
+            <button onclick="answerQuestion(false)">False</button>
+        </div>
+    </div>
+
+    <footer>
+        <p>© 2024 Copyright Challenge. All rights reserved.</p>
+    </footer>
+
+    <script>
+        let score = 0;
+        let questionIndex = 0;
+        const questions = [
+            { question: "Is it legal to use a copyrighted image without permission?", answer: false },
+            { question: "Copyright protects ideas and concepts.", answer: false },
+            { question: "You can use copyrighted material for educational purposes without permission.", answer: true },
+            { question: "Copyright lasts forever.", answer: false },
+            { question: "You can register your copyright online.", answer: true },
+            { question: "The public domain is where expired copyrights go.", answer: true },
+            { question: "You must always ask permission to quote a small excerpt from a book.", answer: false },
+            { question: "You automatically own copyright when you create an original work.", answer: true },
+            { question: "Creative Commons licenses give more flexibility to share your work.", answer: true },
+            { question: "Music cannot be copyrighted.", answer: false }
+        ];
+
+        function loadQuestion() {
+            if (questions.length === 0) {
+                // Game over, redirect to end page
+                window.location.href = `end.html?score=${score}`;
+                return;
+            }
+
+            // Get random question
+            const randomIndex = Math.floor(Math.random() * questions.length);
+            const randomQuestion = questions.splice(randomIndex, 1)[0];  // Remove selected question
+            document.getElementById('questionText').textContent = randomQuestion.question;
+
+            // Store the correct answer for the current question
+            document.getElementById('questionContainer').setAttribute('data-correct-answer', randomQuestion.answer);
+        }
+
+        function answerQuestion(isTrue) {
+            const correctAnswer = document.getElementById('questionContainer').getAttribute('data-correct-answer') === 'true';
+
+            if (correctAnswer === isTrue) {
+                score++;
+            }
+
+            loadQuestion();
+        }
+
+        // Load the first question
+        loadQuestion();
+    </script>
+
+</body>
+</html>

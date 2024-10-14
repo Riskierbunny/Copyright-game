@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Scoreboard - Copyright Challenge</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            text-align: center;
+            padding: 20px;
+        }
+        h1 {
+            color: #2c3e50;
+        }
+        #scoreboard {
+            margin-top: 20px;
+            border: 1px solid #3498db;
+            padding: 20px;
+            background-color: #ecf0f1;
+            border-radius: 8px;
+            display: inline-block;
+        }
+        #scoreboard p {
+            font-size: 1.2rem;
+            margin: 5px 0;
+        }
+        button {
+            background-color: #3498db;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1rem;
+            margin-top: 20px;
+        }
+        button:hover {
+            background-color: #2980b9;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Game Scoreboard</h1>
+    <p>Your Score: <span id="userScore">0</span></p>
+    <button onclick="submitScore()">Submit Score</button>
+
+    <div id="scoreboard">
+        <h2>Latest Scores</h2>
+        <p>No scores submitted yet.</p>
+    </div>
+
+    <script>
+        let userScore = Math.floor(Math.random() * 100); // Replace with actual game score
+        document.getElementById('userScore').textContent = userScore;
+
+        const webhookURL = 'https://discord.com/api/webhooks/1295382285423742976/B7vYITrf9jmCNjFjO2IllM-zljaM_Hz77XabkAy5dXfhMTj5Qucel8F0QRAwEc1ySZ7i'; // Replace with your actual webhook URL
+
+        function submitScore() {
+            const username = prompt("Enter your username:");
+            if (!username) return alert("Username is required!");
+
+            const message = {
+                content: `**${username}** scored **${userScore}** points!`
+            };
+
+            fetch(webhookURL, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(message)
+            })
+            .then(response => {
+                if (response.ok) {
+                    alert("Score submitted to Discord!");
+                    updateScoreboard(username, userScore);
+                } else {
+                    alert("Failed to submit the score!");
+                }
+            })
+            .catch(error => console.error("Error:", error));
+        }
+
+        function updateScoreboard(username, score) {
+            const scoreboard = document.getElementById('scoreboard');
+            const newScore = document.createElement('p');
+            newScore.textContent = `${username}: ${score} points`;
+            scoreboard.appendChild(newScore);
+        }
+    </script>
+
+</body>
+</html>
